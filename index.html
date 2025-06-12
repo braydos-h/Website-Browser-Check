@@ -10,6 +10,8 @@
 </head>
 <body>
   <h1>Browser Device Information</h1>
+  <p id="notice">This page may ask to access your location and media devices. All information stays in your browser and is not sent anywhere.</p>
+  <button id="collect-btn">Collect Location and Media Info</button>
   <dl id="info"></dl>
   <script>
     const info = {
@@ -45,24 +47,30 @@
       addEntry(key, value);
     }
 
-    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-      navigator.mediaDevices.enumerateDevices()
-        .then(devices => {
-          const descriptions = devices.map(d => d.kind + ': ' + (d.label || 'hidden by permission'));
-          addEntry('Media Devices', descriptions.join('; '));
-        })
-        .catch(err => addEntry('Media Devices', 'Error: ' + err));
+    function collectOptionalInfo() {
+      if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        navigator.mediaDevices.enumerateDevices()
+          .then(devices => {
+            const descriptions = devices.map(d => d.kind + ': ' + (d.label || 'hidden by permission'));
+            addEntry('Media Devices', descriptions.join('; '));
+          })
+          .catch(err => addEntry('Media Devices', 'Error: ' + err));
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            addEntry('Latitude', position.coords.latitude);
+            addEntry('Longitude', position.coords.longitude);
+          },
+          err => addEntry('Geolocation', 'Error: ' + err.message)
+        );
+      }
+
+      document.getElementById('collect-btn').disabled = true;
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          addEntry('Latitude', position.coords.latitude);
-          addEntry('Longitude', position.coords.longitude);
-        },
-        err => addEntry('Geolocation', 'Error: ' + err.message)
-      );
-    }
+    document.getElementById('collect-btn').addEventListener('click', collectOptionalInfo);
   </script>
 </body>
 </html>

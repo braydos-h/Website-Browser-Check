@@ -8,6 +8,7 @@ This project contains a single HTML page that lists device information that your
 - Screen resolution and color depth
 - Network connection information
 - Time zone
-- Optional geolocation and media devices (may prompt for permission)
+- Optional geolocation and media devices (may prompt for permission after
+  clicking the "Collect Location and Media Info" button)
 
 Everything runs in the browser—no network requests are required.
