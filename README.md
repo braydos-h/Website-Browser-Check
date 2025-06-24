@@ -1,4 +1,4 @@
-# website-os-checker
+# Website Browser Check
 
 This project contains a single HTML page that lists device information that your browser can access. Open `index.html` in a modern browser and it will display details such as:
 
